@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<workbook>
+    <worksheet idx="0">
+        <section startRow="0" endRow="2"/>
+        <loop startRow="3" endRow="3" items="studyList" var="study" varType="com.example.jxlsexcel.dto.StudyDto">
+            <section startRow="3" endRow="3">
+                <mapping row="3" col="0">study.title</mapping>
+                <mapping row="3" col="1">study.content</mapping>
+            </section>
+            <loopbreakcondition>
+                <rowcheck offset="0"/>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>

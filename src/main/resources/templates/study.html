@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>jxls excel example</title>
+    </head>
+    <body>
+        <div style="height: 300px;" align="center">
+            <h2>excel download</h2>
+            <table border="1">
+                <tr>
+                    <th style="width: 50px;">No</th>
+                    <th style="width: 150px;">Title</th>
+                    <th style="width: 150px;">Content</th>
+                    <th style="width: 170px;">CreatedAt</th>
+                </tr>
+                <tr th:each="study : ${list}" align="center">
+                    <td th:text="${study.id}"></td>
+                    <td th:text="${study.title}"></td>
+                    <td th:text="${study.content}"></td>
+                    <td th:text="${study.createdAt}"></td>
+                </tr>
+            </table><br>
+            <button id="excel-down">excel download</button>
+        </div>
+        <div align="center">
+            <h2>excel upload</h2>
+            <input type="file" id="excel-file">
+            <button id="sample-down">sample file download</button>
+            <button id="excel-upload">excel upload</button>
+        </div>
+        <script type="text/javascript">
+            document.getElementById("excel-down").addEventListener("click", excelDownload);
+            document.getElementById("sample-down").addEventListener("click", sampleDownload);
+            document.getElementById("excel-upload").addEventListener("click", excelUpload);
+
+            function excelDownload() {
+                location.href = "/study/excel/download";
+            }
+            function sampleDownload() {
+                location.href = "/study/excel/sample";
+            }
+            function excelUpload() {
+                const excelFile = document.getElementById("excel-file");
+
+                if (!excelFile.value) {
+                    alert("엑셀파일을 첨부해주세요.");
+                    return;
+                }
+                const extension = excelFile.files[0].name.split(".").pop().toLowerCase();
+
+                if (extension !== "xlsx" && extension !== "xls") {
+                    alert("엑셀파일을 첨부해주세요.");
+                    excelFile.value = null;
+                    return;
+                }
+                const formData = new FormData();
+                formData.append("excelFile", excelFile.files[0]);
+
+                fetch("/study/excel/upload", {
+                    method : "POST"
+                    , body : formData
+                })
+                .then(response => console.log(response));
+            }
+        </script>
+    </body>
+</html>
